@@ -2,12 +2,6 @@
 
 Metrics for connectors, to provide response times, error & success counts for downstream services.  Leverages the existing MDTP patterns to make it as easy as possible to add metrics to your services.   
 
-## Installation
-
-```
-    "uk.gov.hmrc" %% "http-metrics" % "x.x.x"
-```
-
 ## Usage 
 
 ```scala
@@ -50,7 +44,7 @@ Include the following dependency in your SBT build
 ``` scala
 resolvers += Resolver.bintrayRepo("hmrc", "releases")
  
-libraryDependencies += "uk.gov.hmrc" %% "http-metrics_2.11" % "[INSERT-VERSION]"
+libraryDependencies += "uk.gov.hmrc" %% "http-metrics" % "[INSERT-VERSION]"
 ```
 
 ## License
