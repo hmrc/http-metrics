@@ -44,7 +44,7 @@ Include the following dependency in your SBT build
 ``` scala
 resolvers += Resolver.bintrayRepo("hmrc", "releases")
  
-libraryDependencies += "uk.gov.hmrc" %% "http-metrics_2.11" % "[INSERT-VERSION]"
+libraryDependencies += "uk.gov.hmrc" %% "http-metrics" % "[INSERT-VERSION]"
 ```
 
 ## License
