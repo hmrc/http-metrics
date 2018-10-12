@@ -46,6 +46,6 @@ lazy val library = (project in file("."))
   )
 
 // Coverage configuration
-coverageMinimum := 90
+coverageMinimum := 66
 coverageFailOnMinimum := true
 coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;uk.gov.hmrc.BuildInfo"
