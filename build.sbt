@@ -32,13 +32,13 @@ lazy val library = (project in file("."))
     targetJvm := "jvm-1.8",
     crossScalaVersions := Seq("2.11.11"),
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play"      % "2.5.12" % "provided",
+      "com.typesafe.play" %% "play"      % "2.5.19" % "provided",
       "org.scalatest"     %% "scalatest" % "3.0.4"  % "test",
-      "uk.gov.hmrc"       %% "hmrctest"  % "2.3.0"  % "test",
+      "uk.gov.hmrc"       %% "hmrctest"  % "3.3.0"  % "test",
       "com.github.tomakehurst" % "wiremock" % "2.8.0" % "test",
       "org.mockito"       % "mockito-all" % "1.10.19" % "test",
       "de.threedimensions" %% "metrics-play" % "2.5.13",
-      "uk.gov.hmrc" %% "play-graphite" % "3.6.2"
+      "uk.gov.hmrc" %% "play-graphite" % "4.4.0"
     ),
     resolvers := Seq(
       Resolver.bintrayRepo("hmrc", "releases")
