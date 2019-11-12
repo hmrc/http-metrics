@@ -21,9 +21,11 @@ import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.versioning.SbtGitVersioning
+import play.core.PlayVersion
 
 lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
+  .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
     scalaVersion := "2.11.11",
     name := "http-metrics",
@@ -31,19 +33,47 @@ lazy val library = (project in file("."))
     makePublicallyAvailableOnBintray := true,
     targetJvm := "jvm-1.8",
     crossScalaVersions := Seq("2.11.11"),
-    libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play"      % "2.5.19" % "provided",
-      "org.scalatest"     %% "scalatest" % "3.0.4"  % "test",
-      "uk.gov.hmrc"       %% "hmrctest"  % "3.9.0-play-25"  % "test",
-      "com.github.tomakehurst" % "wiremock" % "2.8.0" % "test",
-      "org.mockito"       % "mockito-all" % "1.10.19" % "test",
-      "de.threedimensions" %% "metrics-play" % "2.5.13",
-      "uk.gov.hmrc" %% "play-graphite" % "4.7.0"
-    ),
+    libraryDependencies ++= deps,
     resolvers := Seq(
       Resolver.bintrayRepo("hmrc", "releases")
     )
   )
+
+val compileDepsShared: Seq[ModuleID] = Seq(
+  "uk.gov.hmrc" %% "play-graphite" % "4.7.0",
+  "com.typesafe.play" %% "play" % PlayVersion.current % "test, provided"
+)
+
+val compileDepsPlay25: Seq[ModuleID] = Seq(
+  "de.threedimensions" %% "metrics-play" % "2.5.13"
+)
+
+val compileDepsPlay26: Seq[ModuleID] = Seq(
+
+)
+
+val testDepsShared: Seq[ModuleID] = Seq(
+  "com.github.tomakehurst"    % "wiremock" % "2.8.0" % Test,
+  "org.mockito"               % "mockito-all" % "1.10.19" % Test
+)
+
+val testDepsPlay25: Seq[ModuleID] = Seq(
+  "uk.gov.hmrc"             %% "hmrctest"  % "3.9.0-play-25"  % Test,
+  "org.scalatestplus.play"  %% "scalatestplus-play" % "2.0.1" % Test,
+  "org.mockito"              % "mockito-all" % "1.10.19" % Test
+)
+
+val testDepsPlay26: Seq[ModuleID] = Seq(
+  "uk.gov.hmrc"             %% "hmrctest"  % "3.9.0-play-26"  % Test,
+  "org.scalatestplus.play"  %% "scalatestplus-play" % "3.1.2" % Test,
+  "org.mockito"             %% "mockito-scala-scalatest" % "1.7.1" % Test
+)
+
+val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
+  shared = compileDepsShared ++ testDepsShared,
+  play25 = compileDepsPlay25 ++ testDepsPlay25,
+  play26 = compileDepsPlay26 ++ testDepsPlay26
+)
 
 // Coverage configuration
 coverageMinimum := 66
