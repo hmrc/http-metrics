@@ -9,3 +9,4 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 addSbtPlugin("uk.gov.hmrc" % "sbt-artifactory" % "0.19.0")
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.19")
 
+addSbtPlugin("uk.gov.hmrc" % "sbt-play-cross-compilation" % "0.17.0")
