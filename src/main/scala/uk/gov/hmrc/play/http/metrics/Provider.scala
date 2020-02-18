@@ -17,6 +17,7 @@
 package uk.gov.hmrc.play.http.metrics
 
 import com.codahale.metrics.MetricRegistry
+import play.api.Play
 import uk.gov.hmrc.play.graphite.MicroserviceMetrics
 
 trait Provider {
@@ -45,6 +46,10 @@ trait PlayProvider extends Provider {
       def stop: Unit = context.stop()
     }
   }
+}
+
+trait MicroserviceMetrics {
+  val metrics: Metrics = Play.current.injector.instanceOf[Metrics]
 }
 
 object PlayProvider extends PlayProvider with MicroserviceMetrics {

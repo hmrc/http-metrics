@@ -8,5 +8,3 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 addSbtPlugin("uk.gov.hmrc" % "sbt-artifactory" % "1.0.0")
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.24")
-
-addSbtPlugin("uk.gov.hmrc" % "sbt-play-cross-compilation" % "0.17.0")
