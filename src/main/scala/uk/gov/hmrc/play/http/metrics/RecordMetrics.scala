@@ -19,29 +19,19 @@ package uk.gov.hmrc.play.http.metrics
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-trait Metrics {
-  val provider: Provider
+trait RecordMetrics {
+  val apiMetrics: ApiMetrics
+  val api: API
 
-  def record[A](api: API)(f: => Future[A])(implicit ec: ExecutionContext): Future[A] = {
-    val timer = provider.startTimer(api)
+  def record[A](f: => Future[A])(implicit ec: ExecutionContext): Future[A] = {
+    val timer = apiMetrics.startTimer(api)
 
     f.andThen {
       case _ => timer.stop()
     }
     .andThen {
-      case Success(_) => provider.recordSuccess(api)
-      case Failure(_) => provider.recordFailure(api)
+      case Success(_) => apiMetrics.recordSuccess(api)
+      case Failure(_) => apiMetrics.recordFailure(api)
     }
   }
 }
-
-object PlayMetrics extends Metrics {
-  override lazy val provider = PlayProvider
-}
-
-object NoopMetrics extends Metrics {
-  override val provider = NoopProvider
-  override def record[A](api: API)(f: => Future[A])(implicit ec: ExecutionContext): Future[A] =
-    f
-}
-

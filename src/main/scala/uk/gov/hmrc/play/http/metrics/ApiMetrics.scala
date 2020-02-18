@@ -17,9 +17,10 @@
 package uk.gov.hmrc.play.http.metrics
 
 import com.codahale.metrics.MetricRegistry
-import uk.gov.hmrc.play.graphite.MicroserviceMetrics
+import com.kenshoo.play.metrics.{DisabledMetrics, Metrics, MetricsImpl}
+import javax.inject.{Inject, Provider, Singleton}
 
-trait Provider {
+trait ApiMetrics {
   def recordFailure(api: API): Unit
   def recordSuccess(api: API): Unit
   def startTimer(api: API): Timer
@@ -29,8 +30,10 @@ trait Timer {
   def stop(): Unit
 }
 
-trait PlayProvider extends Provider {
-  val metricsRegistry: MetricRegistry
+trait BaseApiMetrics extends ApiMetrics {
+  val metrics: Metrics
+
+  val metricsRegistry: MetricRegistry = metrics.defaultRegistry
 
   def recordFailure(api: API): Unit =
     metricsRegistry.counter(api.name ++ "-failed-counter").inc()
@@ -42,21 +45,33 @@ trait PlayProvider extends Provider {
     val context = metricsRegistry.timer(api.name ++ "-timer").time()
 
     new Timer {
-      def stop: Unit = context.stop()
+      def stop(): Unit = context.stop
     }
   }
 }
 
-object PlayProvider extends PlayProvider with MicroserviceMetrics {
-  val metricsRegistry = metrics.defaultRegistry
+@Singleton
+class ApiMetricsProvider @Inject()(inboundMetrics: Metrics) extends Provider[ApiMetrics] {
+  def get(): ApiMetrics = {
+    inboundMetrics match {
+      case m: MetricsImpl => new ApiMetricsImpl(m)
+      case m: DisabledMetrics => new NoopApiMetrics(m)
+    }
+  }
 }
 
+class ApiMetricsImpl(val metrics: Metrics) extends BaseApiMetrics
+
+// $COVERAGE-OFF$
+// This code will not get called as an exception is thrown by DisabledMetrics when metrics.defaultRegistry is called on class creation
+// not able to test this.
 object NoopTimer extends Timer {
-  def stop = ()
+  def stop() = {}
 }
 
-object NoopProvider extends Provider {
-  def recordFailure(api: API) = ()
-  def recordSuccess(api: API) = ()
-  def startTimer(api: API) = NoopTimer
+class NoopApiMetrics(val metrics: Metrics) extends BaseApiMetrics {
+  override def recordFailure(api: API) = ()
+  override def recordSuccess(api: API) = ()
+  override def startTimer(api: API) = NoopTimer
 }
+// $COVERAGE-ON$
