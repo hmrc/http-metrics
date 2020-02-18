@@ -62,6 +62,9 @@ class ApiMetricsProvider @Inject()(inboundMetrics: Metrics) extends Provider[Api
 
 class ApiMetricsImpl(val metrics: Metrics) extends BaseApiMetrics
 
+// $COVERAGE-OFF$
+// This code will not get called as an exception is thrown by DisabledMetrics when metrics.defaultRegistry is called on class creation
+// not able to test this.
 object NoopTimer extends Timer {
   def stop() = {}
 }
@@ -71,3 +74,4 @@ class NoopApiMetrics(val metrics: Metrics) extends BaseApiMetrics {
   override def recordSuccess(api: API) = ()
   override def startTimer(api: API) = NoopTimer
 }
+// $COVERAGE-ON$

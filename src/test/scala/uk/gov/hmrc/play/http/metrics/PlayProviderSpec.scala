@@ -20,57 +20,92 @@ import org.mockito.Mockito._
 import uk.gov.hmrc.play.test.UnitSpec
 import com.codahale.metrics.{Counter, MetricRegistry}
 import com.codahale.metrics.Timer.Context
-import com.kenshoo.play.metrics.Metrics
+import com.kenshoo.play.metrics.{DisabledMetrics, Metrics, MetricsDisabledException, MetricsImpl}
 import org.scalatest.mockito.MockitoSugar
 
 class PlayProviderSpec extends UnitSpec with MockitoSugar {
+
   trait Setup {
 
-    val mockApiMetricsProvider = mock[ApiMetricsProvider]
-    val mockMetrics = mock[Metrics]
+
+    val mockMetrics = mock[MetricsImpl]
     val mockRegistry = mock[MetricRegistry]
 
-    when (mockApiMetricsProvider.get()).thenReturn(new ApiMetricsImpl(mockMetrics))
-    when (mockMetrics.defaultRegistry).thenReturn(mockRegistry)
     val api = API("api")
 
     val failureCounter = mock[Counter]
-    when (failureCounter.inc()).thenReturn(())
-    when(mockRegistry.counter("api-failed-counter-failed-counter")).thenReturn(failureCounter)
+    when(failureCounter.inc()).thenCallRealMethod()
+    when(mockRegistry.counter("api-failed-counter")).thenReturn(failureCounter)
 
     val successCounter = mock[Counter]
-    when (successCounter.inc()).thenReturn(())
-    when(mockRegistry.counter("api-success-counter-success-counter")).thenReturn(successCounter)
+    when(successCounter.inc()).thenCallRealMethod()
+    when(mockRegistry.counter("api-success-counter")).thenReturn(successCounter)
 
     val timer = mock[com.codahale.metrics.Timer]
     val context = mock[Context]
-    when (context.stop()).thenReturn(1L)
+    when(context.stop()).thenReturn(1L)
 
-    when(mockRegistry.timer("api-timer-timer")).thenReturn(timer)
+    when(mockRegistry.timer("api-timer")).thenReturn(timer)
     when(timer.time()).thenReturn(context)
+
+    when(mockMetrics.defaultRegistry).thenReturn(mockRegistry)
+    val apiMetricsProviderWithMetricImpl = new ApiMetricsProvider(mockMetrics)
+    val apiMetricsProviderWithDisabledMetrics = new ApiMetricsProvider(new DisabledMetrics())
+
   }
 
-  "PlayProvider" should {
-    "record failures to the api-failed-counter" in new Setup {
-      mockApiMetricsProvider.get.recordFailure(api)
+  "PlayProvider" when {
 
-      verify(failureCounter).inc()
-      verify(successCounter, never).inc()
+    " a metricImpl is returned" should {
+
+      "record failures to the api-failed-counter" in new Setup {
+        apiMetricsProviderWithMetricImpl.get().recordFailure(api)
+
+        verify(failureCounter).inc()
+        verify(successCounter, never).inc()
+      }
+
+      "record successes to the api-counter" in new Setup {
+        apiMetricsProviderWithMetricImpl.get().recordSuccess(api)
+
+        verify(successCounter).inc()
+        verify(failureCounter, never).inc()
+      }
+
+      "record timing to the api-timer" in new Setup {
+        val t = apiMetricsProviderWithMetricImpl.get().startTimer(api)
+        verify(context, never).stop()
+
+        t.stop()
+        verify(context).stop()
+      }
     }
+    " a disabledMetrics is returned is returned" should {
 
-    "record successes to the api-counter" in new Setup {
-      mockApiMetricsProvider.get.recordSuccess(api)
+      "record failures to the api-failed-counter" in new Setup {
 
-      verify(successCounter).inc()
-      verify(failureCounter, never).inc()
-    }
+        intercept[MetricsDisabledException] {
+          apiMetricsProviderWithDisabledMetrics.get()
 
-    "record timing to the api-timer" in new Setup {
-      val t = mockApiMetricsProvider.get.startTimer(api)
-      verify(context, never).stop()
+        }
 
-      t.stop()
-      verify(context).stop()
+      }
+
+      "record successes to the api-counter" in new Setup {
+        intercept[MetricsDisabledException] {
+          apiMetricsProviderWithDisabledMetrics.get()
+        }
+
+      }
+
+      "record timing to the api-timer" in new Setup {
+        intercept[MetricsDisabledException] {
+          apiMetricsProviderWithDisabledMetrics.get()
+        }
+
+      }
+
+
     }
   }
 }
