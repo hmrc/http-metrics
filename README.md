@@ -5,7 +5,7 @@ Metrics for connectors, to provide response times, error & success counts for do
 ## Usage 
 
 ```scala
-import uk.gov.hmrc.play.http.metrics.{Metrics,PlayMetrics,API}
+import uk.gov.hmrc.play.http.metrics.{Metrics,PlayMetrics}
 
 trait HelloWorldConnector { 
   val metrics: Metrics

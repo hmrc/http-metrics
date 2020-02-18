@@ -39,8 +39,7 @@ lazy val library = (project in file("."))
   )
 
 val compile: Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0",
-  "com.kenshoo" %% "metrics-play" % "2.6.19_0.7.0"
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0"
 )
 
 val test: Seq[ModuleID] = Seq(
