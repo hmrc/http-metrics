@@ -86,8 +86,6 @@ class PlayProviderSpec extends UnitSpec with MockitoSugar {
         apiMetricsProviderWithDisabledMetrics.get().recordFailure(api) shouldBe ()
         verify(successCounter, never).inc()
         verify(failureCounter, never).inc()
-
-
       }
 
       "record successes to the api-counter" in new Setup {
@@ -96,7 +94,6 @@ class PlayProviderSpec extends UnitSpec with MockitoSugar {
 
         verify(successCounter, never).inc()
         verify(failureCounter, never).inc()
-
 
       }
 

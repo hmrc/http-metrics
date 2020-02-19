@@ -30,6 +30,7 @@ trait Timer {
   def stop(): Unit
 }
 
+
 class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 
   val metricsRegistry: MetricRegistry = metrics.defaultRegistry
@@ -68,4 +69,3 @@ class NoopApiMetrics extends ApiMetrics {
   override def recordSuccess(api: API): Unit = ()
   override def startTimer(api: API): NoopTimer.type = NoopTimer
 }
-
