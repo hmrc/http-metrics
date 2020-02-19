@@ -30,8 +30,8 @@ trait Timer {
   def stop(): Unit
 }
 
-trait BaseApiMetrics extends ApiMetrics {
-  val metrics: Metrics
+
+class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 
   val metricsRegistry: MetricRegistry = metrics.defaultRegistry
 
@@ -55,23 +55,17 @@ class ApiMetricsProvider @Inject()(inboundMetrics: Metrics) extends Provider[Api
   def get(): ApiMetrics = {
     inboundMetrics match {
       case m: MetricsImpl => new ApiMetricsImpl(m)
-      case m: DisabledMetrics => new NoopApiMetrics(m)
+      case _: DisabledMetrics => new NoopApiMetrics
     }
   }
 }
 
-class ApiMetricsImpl(val metrics: Metrics) extends BaseApiMetrics
-
-// $COVERAGE-OFF$
-// This code will not get called as an exception is thrown by DisabledMetrics when metrics.defaultRegistry is called on class creation
-// not able to test this.
 object NoopTimer extends Timer {
-  def stop() = {}
+  def stop(): Unit = {}
 }
 
-class NoopApiMetrics(val metrics: Metrics) extends BaseApiMetrics {
-  override def recordFailure(api: API) = ()
-  override def recordSuccess(api: API) = ()
-  override def startTimer(api: API) = NoopTimer
+class NoopApiMetrics extends ApiMetrics {
+  override def recordFailure(api: API): Unit = ()
+  override def recordSuccess(api: API): Unit = ()
+  override def startTimer(api: API): NoopTimer.type = NoopTimer
 }
-// $COVERAGE-ON$
