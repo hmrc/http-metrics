@@ -80,29 +80,29 @@ class PlayProviderSpec extends UnitSpec with MockitoSugar {
         verify(context).stop()
       }
     }
-    " a disabledMetrics is returned is returned" should {
+    " a disabledMetrics is returned" should {
 
       "record failures to the api-failed-counter" in new Setup {
+        apiMetricsProviderWithDisabledMetrics.get().recordFailure(api) shouldBe ()
+        verify(successCounter, never).inc()
+        verify(failureCounter, never).inc()
 
-        intercept[MetricsDisabledException] {
-          apiMetricsProviderWithDisabledMetrics.get()
-
-        }
 
       }
 
       "record successes to the api-counter" in new Setup {
-        intercept[MetricsDisabledException] {
-          apiMetricsProviderWithDisabledMetrics.get()
-        }
+
+        apiMetricsProviderWithDisabledMetrics.get().recordSuccess(api) shouldBe ()
+
+        verify(successCounter, never).inc()
+        verify(failureCounter, never).inc()
+
 
       }
 
       "record timing to the api-timer" in new Setup {
-        intercept[MetricsDisabledException] {
-          apiMetricsProviderWithDisabledMetrics.get()
-        }
-
+        apiMetricsProviderWithDisabledMetrics.get().startTimer(api)  shouldEqual NoopTimer
+          verify(context, never).stop()
       }
 
 
