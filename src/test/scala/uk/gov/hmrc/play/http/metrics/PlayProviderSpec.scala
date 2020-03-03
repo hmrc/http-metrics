@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.play.http.metrics
 
-import org.mockito.Mockito._
-import uk.gov.hmrc.play.test.UnitSpec
-import com.codahale.metrics.{Counter, MetricRegistry}
 import com.codahale.metrics.Timer.Context
-import com.kenshoo.play.metrics.{DisabledMetrics, Metrics, MetricsDisabledException, MetricsImpl}
+import com.codahale.metrics.{Counter, MetricRegistry}
+import com.kenshoo.play.metrics.{DisabledMetrics, MetricsImpl}
+import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
+import uk.gov.hmrc.play.test.UnitSpec
 
 class PlayProviderSpec extends UnitSpec with MockitoSugar {
 
