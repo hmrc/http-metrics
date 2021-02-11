@@ -23,11 +23,10 @@ import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 
 lazy val deps: Seq[ModuleID] = compile ++ test
 
-
 lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
   .settings(
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.12",
     name := "http-metrics",
     majorVersion := 1,
     makePublicallyAvailableOnBintray := true,
@@ -39,14 +38,14 @@ lazy val library = (project in file("."))
   )
 
 val compile: Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "2.0.0"
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "2.3.0"
 )
 
 val test: Seq[ModuleID] = Seq(
-  "com.github.tomakehurst"    % "wiremock" % "2.8.0" % Test,
-  "org.mockito"               % "mockito-all" % "1.10.19" % Test,
-  "org.scalatestplus.play"  %% "scalatestplus-play" % "3.1.2" % Test,
-  "uk.gov.hmrc"             %% "hmrctest"  % "3.9.0-play-26"  % Test
+  "org.pegdown"             % "pegdown"                 % "1.6.0" % Test,
+  "com.github.tomakehurst"  % "wiremock"                % "2.8.0" % Test,
+  "org.scalatestplus.play" %% "scalatestplus-play"      % "3.1.3" % Test,
+  "org.mockito"            %% "mockito-scala-scalatest" % "1.7.1" % Test
 )
 
 // Coverage configuration

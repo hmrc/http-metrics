@@ -2,6 +2,9 @@
 logs
 project/project
 project/target
+project/metals.sbt
+.bloop
+/.metals
 target
 lib_managed
 tmp

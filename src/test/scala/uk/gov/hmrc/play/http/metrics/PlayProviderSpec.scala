@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,9 @@ package uk.gov.hmrc.play.http.metrics
 import com.codahale.metrics.Timer.Context
 import com.codahale.metrics.{Counter, MetricRegistry}
 import com.kenshoo.play.metrics.{DisabledMetrics, MetricsImpl}
-import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.play.test.UnitSpec
+import utils.AsyncHmrcSpec
 
-class PlayProviderSpec extends UnitSpec with MockitoSugar {
+class PlayProviderSpec extends AsyncHmrcSpec {
 
   trait Setup {
 
@@ -83,14 +81,14 @@ class PlayProviderSpec extends UnitSpec with MockitoSugar {
     " a disabledMetrics is returned" should {
 
       "record failures to the api-failed-counter" in new Setup {
-        apiMetricsProviderWithDisabledMetrics.get().recordFailure(api) shouldBe ()
+        apiMetricsProviderWithDisabledMetrics.get().recordFailure(api) shouldBe (())
         verify(successCounter, never).inc()
         verify(failureCounter, never).inc()
       }
 
       "record successes to the api-counter" in new Setup {
 
-        apiMetricsProviderWithDisabledMetrics.get().recordSuccess(api) shouldBe ()
+        apiMetricsProviderWithDisabledMetrics.get().recordSuccess(api) shouldBe (())
 
         verify(successCounter, never).inc()
         verify(failureCounter, never).inc()

@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.play.http.metrics
+package utils
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+import org.scalatest.{Matchers, OptionValues, WordSpec}
+import org.scalatestplus.play.WsScalaTestClient
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 
-trait RecordMetrics {
-  val apiMetrics: ApiMetrics
-  val api: API
+abstract class HmrcSpec extends WordSpec with Matchers with OptionValues with WsScalaTestClient with MockitoSugar with ArgumentMatchersSugar
 
-  def record[A](f: => Future[A])(implicit ec: ExecutionContext): Future[A] = {
-    val timer = apiMetrics.startTimer(api)
-
-    f.andThen {
-      case _ => timer.stop()
-    }
-    .andThen {
-      case Success(_) => apiMetrics.recordSuccess(api)
-      case Failure(_) => apiMetrics.recordFailure(api)
-    }
-  }
-}
+abstract class AsyncHmrcSpec extends HmrcSpec with DefaultAwaitTimeout with FutureAwaits {}
