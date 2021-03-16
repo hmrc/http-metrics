@@ -35,10 +35,10 @@ lazy val commonSettings = Seq(
     Resolver.typesafeRepo("releases")
   ),
   scalacOptions ++= Seq("-feature"),
-  // libraryDependencies ++= Seq(
-  //   compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
-  //   "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
-  // )
+  libraryDependencies ++= Seq(
+    compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
+    "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
+  )
 )
 
 lazy val library = (project in file("."))
@@ -48,7 +48,7 @@ lazy val library = (project in file("."))
     publish := {},
     publishLocal := {},
     publishAndDistribute := {},
-    crossScalaVersions := Nil,
+    crossScalaVersions := Nil
   )
   .aggregate(
     httpMetrics,
