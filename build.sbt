@@ -42,10 +42,11 @@ lazy val commonSettings = Seq(
 )
 
 lazy val library = (project in file("."))
-  .enablePlugins(SbtAutoBuildPlugin, SbtArtifactory)
+  .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
   .settings(
     commonSettings,
     publish := {},
+    publishLocal := {},
     publishAndDistribute := {},
     crossScalaVersions := Nil,
   )
@@ -80,7 +81,6 @@ lazy val httpMetricsPlay27 = Project("http-metrics-play-27", file("http-metrics-
   .enablePlugins(SbtAutoBuildPlugin, SbtArtifactory)
   .settings(
     commonSettings,
-    crossScalaVersions := Seq(scala2_12),
     sharedSources,
     libraryDependencies ++= LibDependencies.coreCompileCommon ++
     LibDependencies.coreCompilePlay27 ++
