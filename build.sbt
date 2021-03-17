@@ -15,84 +15,41 @@
  */
 import sbt.Keys._
 import sbt._
-val name = "http-metrics"
+import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+import uk.gov.hmrc.versioning.SbtGitVersioning
 
 val scala2_12 = "2.12.12"
 
-// Disable multiple project tests running at the same time: https://stackoverflow.com/questions/11899723/how-to-turn-off-parallel-execution-of-tests-for-multi-project-builds
-// TODO: restrict parallelExecution to tests only (the obvious way to do this using Test scope does not seem to work correctly)
-parallelExecution in Global := false
-
 val silencerVersion = "1.7.1"
-
-lazy val commonSettings = Seq(
-  organization := "uk.gov.hmrc",
-  majorVersion := 2,
-  scalaVersion := scala2_12,
-  makePublicallyAvailableOnBintray := true,
-  resolvers := Seq(
-    Resolver.bintrayRepo("hmrc", "releases"),
-    Resolver.typesafeRepo("releases")
-  ),
-  scalacOptions ++= Seq("-feature"),
-  libraryDependencies ++= Seq(
-    compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
-    "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
-  )
-)
 
 lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
+  .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
-    commonSettings,
-    publish := {},
-    publishLocal := {},
-    publishAndDistribute := {},
-    crossScalaVersions := Nil
-  )
-  .aggregate(
-    httpMetrics,
-    httpMetricsPlay26,
-    httpMetricsPlay27
+    scalaVersion := scala2_12,
+    majorVersion := 2,
+    name := "http-metrics",
+    makePublicallyAvailableOnBintray := true,
+    libraryDependencies ++= deps,
+    resolvers := Seq(
+      Resolver.bintrayRepo("hmrc", "releases")
+    ),
+    libraryDependencies ++= Seq(
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
+      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
+    )
   )
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
 
-lazy val httpMetrics = Project("http-metrics", file("http-metrics"))
-  .enablePlugins(SbtAutoBuildPlugin, SbtArtifactory)
-  .settings(
-    commonSettings
-  )
-
-lazy val httpMetricsPlay26 = Project("http-metrics-play-26", file("http-metrics-play-26"))
-  .enablePlugins(SbtAutoBuildPlugin, SbtArtifactory)
-  .settings(
-    commonSettings,
-    sharedSources,
-    libraryDependencies ++= 
-      LibDependencies.coreCompileCommon ++
-      LibDependencies.coreCompilePlay26 ++
-      LibDependencies.coreTestCommon ++
-      LibDependencies.coreTestPlay26,
-    Test / fork := true // akka is not unloaded properly, which can affect other tests
-  )
-  .dependsOn(httpMetrics)
-  
-lazy val httpMetricsPlay27 = Project("http-metrics-play-27", file("http-metrics-play-27"))
-  .enablePlugins(SbtAutoBuildPlugin, SbtArtifactory)
-  .settings(
-    commonSettings,
-    sharedSources,
-    libraryDependencies ++= LibDependencies.coreCompileCommon ++
-    LibDependencies.coreCompilePlay27 ++
-    LibDependencies.coreTestCommon ++
-    LibDependencies.coreTestPlay27,
-    Test    / fork := true // akka is not unloaded properly, which can affect other tests
-  )
-  .dependsOn(httpMetrics)
-    
-def sharedSources = Seq(
-  Compile / unmanagedSourceDirectories   += baseDirectory.value / "../http-metrics-common/src/main/scala",
-  Compile / unmanagedResourceDirectories += baseDirectory.value / "../http-metrics-common/src/main/resources",
-  Test    / unmanagedSourceDirectories   += baseDirectory.value / "../http-metrics-common/src/test/scala",
-  Test    / unmanagedResourceDirectories += baseDirectory.value / "../http-metrics-common/src/test/resources"
+val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
+  play26 = (LibDependencies.coreCompilePlay26 ++ LibDependencies.coreTestPlay26),
+  play27 = (LibDependencies.coreCompilePlay27 ++ LibDependencies.coreTestPlay27),
+  shared = (LibDependencies.coreCompileCommon ++ LibDependencies.coreTestCommon)
 )
+
+// Coverage configuration
+coverageMinimum := 66
+coverageFailOnMinimum := true
+coverageExcludedPackages := Seq(
+    "uk.gov.hmrc.play.http.metrics.common"
+).mkString(";")

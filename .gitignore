@@ -4,7 +4,8 @@ project/project
 project/target
 project/metals.sbt
 .bloop
-/.metals
+.metals
+.vscode
 target
 lib_managed
 tmp
