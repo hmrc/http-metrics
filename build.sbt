@@ -13,42 +13,86 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import sbt.Keys._
 import sbt._
-import uk.gov.hmrc.DefaultBuildSettings.targetJvm
-import uk.gov.hmrc.versioning.SbtGitVersioning
-import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
-import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
+val name = "http-metrics"
 
-lazy val deps: Seq[ModuleID] = compile ++ test
+val scala2_12 = "2.12.12"
+
+// Disable multiple project tests running at the same time: https://stackoverflow.com/questions/11899723/how-to-turn-off-parallel-execution-of-tests-for-multi-project-builds
+// TODO: restrict parallelExecution to tests only (the obvious way to do this using Test scope does not seem to work correctly)
+parallelExecution in Global := false
+
+val silencerVersion = "1.7.1"
+
+lazy val commonSettings = Seq(
+  organization := "uk.gov.hmrc",
+  majorVersion := 2,
+  scalaVersion := scala2_12,
+  makePublicallyAvailableOnBintray := true,
+  resolvers := Seq(
+    Resolver.bintrayRepo("hmrc", "releases"),
+    Resolver.typesafeRepo("releases")
+  ),
+  scalacOptions ++= Seq("-feature"),
+  libraryDependencies ++= Seq(
+    compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
+    "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
+  )
+)
 
 lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
   .settings(
-    scalaVersion := "2.12.12",
-    name := "http-metrics",
-    majorVersion := 1,
-    makePublicallyAvailableOnBintray := true,
-    targetJvm := "jvm-1.8",
-    libraryDependencies ++= deps,
-    resolvers := Seq(
-      Resolver.bintrayRepo("hmrc", "releases")
-    )
+    commonSettings,
+    publish := {},
+    publishLocal := {},
+    publishAndDistribute := {},
+    crossScalaVersions := Nil
+  )
+  .aggregate(
+    httpMetrics,
+    httpMetricsPlay26,
+    httpMetricsPlay27
+  )
+  .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
+
+lazy val httpMetrics = Project("http-metrics", file("http-metrics"))
+  .enablePlugins(SbtAutoBuildPlugin, SbtArtifactory)
+  .settings(
+    commonSettings
   )
 
-val compile: Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "2.3.0"
+lazy val httpMetricsPlay26 = Project("http-metrics-play-26", file("http-metrics-play-26"))
+  .enablePlugins(SbtAutoBuildPlugin, SbtArtifactory)
+  .settings(
+    commonSettings,
+    sharedSources,
+    libraryDependencies ++= 
+      LibDependencies.coreCompileCommon ++
+      LibDependencies.coreCompilePlay26 ++
+      LibDependencies.coreTestCommon ++
+      LibDependencies.coreTestPlay26,
+    Test / fork := true // akka is not unloaded properly, which can affect other tests
+  )
+  .dependsOn(httpMetrics)
+  
+lazy val httpMetricsPlay27 = Project("http-metrics-play-27", file("http-metrics-play-27"))
+  .enablePlugins(SbtAutoBuildPlugin, SbtArtifactory)
+  .settings(
+    commonSettings,
+    sharedSources,
+    libraryDependencies ++= LibDependencies.coreCompileCommon ++
+    LibDependencies.coreCompilePlay27 ++
+    LibDependencies.coreTestCommon ++
+    LibDependencies.coreTestPlay27,
+    Test    / fork := true // akka is not unloaded properly, which can affect other tests
+  )
+  .dependsOn(httpMetrics)
+    
+def sharedSources = Seq(
+  Compile / unmanagedSourceDirectories   += baseDirectory.value / "../http-metrics-common/src/main/scala",
+  Compile / unmanagedResourceDirectories += baseDirectory.value / "../http-metrics-common/src/main/resources",
+  Test    / unmanagedSourceDirectories   += baseDirectory.value / "../http-metrics-common/src/test/scala",
+  Test    / unmanagedResourceDirectories += baseDirectory.value / "../http-metrics-common/src/test/resources"
 )
-
-val test: Seq[ModuleID] = Seq(
-  "org.pegdown"             % "pegdown"                 % "1.6.0" % Test,
-  "com.github.tomakehurst"  % "wiremock"                % "2.8.0" % Test,
-  "org.scalatestplus.play" %% "scalatestplus-play"      % "3.1.3" % Test,
-  "org.mockito"            %% "mockito-scala-scalatest" % "1.7.1" % Test
-)
-
-// Coverage configuration
-coverageMinimum := 66
-coverageFailOnMinimum := true
-coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;uk.gov.hmrc.BuildInfo"

@@ -23,10 +23,18 @@ object HelloWorldConnector extends HelloWorldConnector {
 }
 ```
 
-
+---
 ## Disabling metrics for Testing
 
 Instead of `PlayMetrics`, use `NoopMetrics` to disable the metrics gathering, keeping the rest of the business logic intact. 
+
+Alternatively when using Guice Application Builder you can set the metrics.jvm config to false.
+```
+    new GuiceApplicationBuilder()
+    .configure(
+        "metrics.jvm" -> false
+    )
+```
 
 ---
 
@@ -39,12 +47,21 @@ sbt test
 
 ## Installing
  
-Include the following dependency in your SBT build
- 
+Include the following dependency in your SBT build for Play 2.6
+
 ``` scala
 resolvers += Resolver.bintrayRepo("hmrc", "releases")
  
-libraryDependencies += "uk.gov.hmrc" %% "http-metrics" % "[INSERT-VERSION]"
+libraryDependencies += "uk.gov.hmrc" %% "http-metrics-play-26" % "[INSERT-VERSION]"
+```
+
+or the following for Play 2.7
+
+
+``` scala
+resolvers += Resolver.bintrayRepo("hmrc", "releases")
+ 
+libraryDependencies += "uk.gov.hmrc" %% "http-metrics-play-27" % "[INSERT-VERSION]"
 ```
 
 ## License
