@@ -21,10 +21,6 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 val scala2_12 = "2.12.12"
 
-// Disable multiple project tests running at the same time: https://stackoverflow.com/questions/11899723/how-to-turn-off-parallel-execution-of-tests-for-multi-project-builds
-// TODO: restrict parallelExecution to tests only (the obvious way to do this using Test scope does not seem to work correctly)
-parallelExecution in Global := false
-
 val silencerVersion = "1.7.1"
 
 lazy val library = (project in file("."))
@@ -56,8 +52,5 @@ val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
 coverageMinimum := 66
 coverageFailOnMinimum := true
 coverageExcludedPackages := Seq(
-    "<empty>",
-    "com.kenshoo.play.metrics",
-    "uk.gov.hmrc.BuildInfo",
     "uk.gov.hmrc.play.http.metrics.common"
 ).mkString(";")
