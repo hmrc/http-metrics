@@ -31,9 +31,6 @@ lazy val library = (project in file("."))
     name := "http-metrics",
     makePublicallyAvailableOnBintray := true,
     libraryDependencies ++= deps,
-    resolvers := Seq(
-      Resolver.bintrayRepo("hmrc", "releases")
-    ),
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
@@ -48,7 +45,7 @@ val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
 )
 
 // Coverage configuration
-coverageMinimum := 66
+coverageMinimum := 80
 coverageFailOnMinimum := true
 coverageExcludedPackages := Seq(
     "uk.gov.hmrc.play.http.metrics.common"
