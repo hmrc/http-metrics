@@ -15,15 +15,13 @@
  */
 import sbt.Keys._
 import sbt._
-import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
-import uk.gov.hmrc.versioning.SbtGitVersioning
 
 val scala2_12 = "2.12.12"
 
 val silencerVersion = "1.7.1"
 
 lazy val library = (project in file("."))
-  .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
+  .enablePlugins(SbtAutoBuildPlugin)
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
     scalaVersion := scala2_12,
@@ -41,6 +39,7 @@ lazy val library = (project in file("."))
 val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
   play26 = (LibDependencies.coreCompilePlay26 ++ LibDependencies.coreTestPlay26),
   play27 = (LibDependencies.coreCompilePlay27 ++ LibDependencies.coreTestPlay27),
+  play28 = (LibDependencies.coreCompilePlay28 ++ LibDependencies.coreTestPlay28),
   shared = (LibDependencies.coreCompileCommon ++ LibDependencies.coreTestCommon)
 )
 
