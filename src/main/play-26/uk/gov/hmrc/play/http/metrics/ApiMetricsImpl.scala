@@ -21,6 +21,7 @@ import com.kenshoo.play.metrics.{DisabledMetrics, Metrics, MetricsImpl}
 import javax.inject.{Inject, Provider, Singleton}
 import uk.gov.hmrc.play.http.metrics.common._
 
+
 class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 
   val metricsRegistry: MetricRegistry = metrics.defaultRegistry

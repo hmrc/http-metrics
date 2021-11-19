@@ -42,16 +42,5 @@ class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 
 @Singleton
 class ApiMetricsProvider @Inject()(inboundMetrics: Metrics) extends Provider[ApiMetrics] {
-  def get(): ApiMetrics = {
-    inboundMetrics match {
-      case m: MetricsImpl => new ApiMetricsImpl(m)
-      case _: DisabledMetrics => new NoopApiMetrics
-    }
-  }
-}
-
-class NoopApiMetrics extends ApiMetrics {
-  override def recordFailure(api: API): Unit = ()
-  override def recordSuccess(api: API): Unit = ()
-  override def startTimer(api: API): NoopTimer.type = NoopTimer
+  def get(): ApiMetrics = new ApiMetricsImpl(inboundMetrics)
 }
