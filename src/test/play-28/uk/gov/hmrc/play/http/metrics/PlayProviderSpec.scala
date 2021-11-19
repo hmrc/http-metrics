@@ -47,7 +47,6 @@ class PlayProviderSpec extends AsyncHmrcSpec {
 
     when(mockMetrics.defaultRegistry).thenReturn(mockRegistry)
     val apiMetricsProviderWithMetricImpl = new ApiMetricsProvider(mockMetrics)
-    val apiMetricsProviderWithDisabledMetrics = new ApiMetricsProvider(new DisabledMetrics())
 
   }
 
@@ -76,30 +75,6 @@ class PlayProviderSpec extends AsyncHmrcSpec {
         t.stop()
         verify(context).stop()
       }
-    }
-    " a disabledMetrics is returned" should {
-
-      "record failures to the api-failed-counter" in new Setup {
-        apiMetricsProviderWithDisabledMetrics.get().recordFailure(api) shouldBe (())
-        verify(successCounter, never).inc()
-        verify(failureCounter, never).inc()
-      }
-
-      "record successes to the api-counter" in new Setup {
-
-        apiMetricsProviderWithDisabledMetrics.get().recordSuccess(api) shouldBe (())
-
-        verify(successCounter, never).inc()
-        verify(failureCounter, never).inc()
-
-      }
-
-      "record timing to the api-timer" in new Setup {
-        apiMetricsProviderWithDisabledMetrics.get().startTimer(api)  shouldEqual NoopTimer
-          verify(context, never).stop()
-      }
-
-
     }
   }
 }
