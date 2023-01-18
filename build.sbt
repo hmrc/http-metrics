@@ -1,9 +1,9 @@
 import sbt.Keys._
 import sbt._
 
-val scala2_12 = "2.12.12"
+val scala2_12 = "2.12.15"
 
-val silencerVersion = "1.7.1"
+val silencerVersion = "1.7.6"
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
 
@@ -21,7 +21,7 @@ lazy val library = (project in file("."))
     scalaVersion := scala2_12,
     majorVersion := 2,
     name := "http-metrics",
-    makePublicallyAvailableOnBintray := true,
+    isPublicArtefact := true,
     libraryDependencies ++= deps,
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),

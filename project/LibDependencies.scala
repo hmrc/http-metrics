@@ -3,7 +3,7 @@ import sbt._
 object LibDependencies {
   val play26Version = "2.6.25"
   val play27Version = "2.7.9"
-  val play28Version = "2.8.7"
+  val play28Version = "2.8.18"
 
   val coreCompileCommon: Seq[ModuleID] = Seq(
     )
