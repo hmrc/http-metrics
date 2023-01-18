@@ -17,8 +17,10 @@
 package uk.gov.hmrc.play.http.metrics
 
 import javax.inject.Singleton
+
 import play.api.inject.Binding
 import play.api.{Configuration, Environment}
+
 import uk.gov.hmrc.play.http.metrics.common.ApiMetrics
 
 class Module extends play.api.inject.Module {

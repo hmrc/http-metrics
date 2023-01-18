@@ -16,10 +16,12 @@
 
 package uk.gov.hmrc.play.http.metrics
 
-import com.codahale.metrics.MetricRegistry
 import javax.inject.{Inject, Provider, Singleton}
-import uk.gov.hmrc.play.http.metrics.common._
+
+import com.codahale.metrics.MetricRegistry
 import com.kenshoo.play.metrics.Metrics
+
+import uk.gov.hmrc.play.http.metrics.common._
 
 class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 

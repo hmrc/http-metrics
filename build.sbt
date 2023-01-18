@@ -5,6 +5,16 @@ val scala2_12 = "2.12.12"
 
 val silencerVersion = "1.7.1"
 
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+
+inThisBuild(
+  List(
+    scalaVersion := scala2_12,
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision
+  )
+)
+
 lazy val library = (project in file("."))
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(

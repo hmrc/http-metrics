@@ -18,7 +18,8 @@ package uk.gov.hmrc.play.http.metrics
 
 import com.codahale.metrics.Timer.Context
 import com.codahale.metrics.{Counter, MetricRegistry}
-import com.kenshoo.play.metrics.{DisabledMetrics, MetricsImpl}
+import com.kenshoo.play.metrics.MetricsImpl
+
 import uk.gov.hmrc.play.http.metrics.common._
 
 class PlayProviderSpec extends AsyncHmrcSpec {
