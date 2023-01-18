@@ -28,7 +28,7 @@ val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
 )
 
 // Coverage configuration
-coverageMinimum := 80
+coverageMinimumStmtTotal := 80
 coverageFailOnMinimum := true
 coverageExcludedPackages := Seq(
     "uk.gov.hmrc.play.http.metrics.common"
