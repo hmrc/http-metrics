@@ -26,13 +26,12 @@ trait Timer {
   def stop(): Unit
 }
 
-
 object NoopTimer extends Timer {
   def stop(): Unit = {}
 }
 
 class NoopApiMetrics extends ApiMetrics {
-  override def recordFailure(api: API): Unit = ()
-  override def recordSuccess(api: API): Unit = ()
+  override def recordFailure(api: API): Unit        = ()
+  override def recordSuccess(api: API): Unit        = ()
   override def startTimer(api: API): NoopTimer.type = NoopTimer
 }

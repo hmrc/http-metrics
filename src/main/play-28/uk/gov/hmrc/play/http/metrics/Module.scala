@@ -22,6 +22,7 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.http.metrics.common.ApiMetrics
 
 class Module extends play.api.inject.Module {
+
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
       bind[ApiMetrics].toProvider[ApiMetricsProvider].in[Singleton]

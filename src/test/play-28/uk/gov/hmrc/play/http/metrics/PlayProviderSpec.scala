@@ -25,7 +25,7 @@ class PlayProviderSpec extends AsyncHmrcSpec {
 
   trait Setup {
 
-    val mockMetrics = mock[MetricsImpl]
+    val mockMetrics  = mock[MetricsImpl]
     val mockRegistry = mock[MetricRegistry]
 
     val api = API("api")
@@ -38,7 +38,7 @@ class PlayProviderSpec extends AsyncHmrcSpec {
     when(successCounter.inc()).thenCallRealMethod()
     when(mockRegistry.counter("api-success-counter")).thenReturn(successCounter)
 
-    val timer = mock[com.codahale.metrics.Timer]
+    val timer   = mock[com.codahale.metrics.Timer]
     val context = mock[Context]
     when(context.stop()).thenReturn(1L)
 

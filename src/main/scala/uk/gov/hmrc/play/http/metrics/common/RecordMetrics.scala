@@ -29,9 +29,9 @@ trait RecordMetrics {
     f.andThen {
       case _ => timer.stop()
     }
-    .andThen {
-      case Success(_) => apiMetrics.recordSuccess(api)
-      case Failure(_) => apiMetrics.recordFailure(api)
-    }
+      .andThen {
+        case Success(_) => apiMetrics.recordSuccess(api)
+        case Failure(_) => apiMetrics.recordFailure(api)
+      }
   }
 }

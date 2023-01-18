@@ -18,7 +18,7 @@ package uk.gov.hmrc.play.http.metrics
 
 import com.codahale.metrics.MetricRegistry
 import javax.inject.{Inject, Provider, Singleton}
-import uk.gov.hmrc.play.http.metrics.common._ 
+import uk.gov.hmrc.play.http.metrics.common._
 import com.kenshoo.play.metrics.Metrics
 
 class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
@@ -41,6 +41,6 @@ class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 }
 
 @Singleton
-class ApiMetricsProvider @Inject()(inboundMetrics: Metrics) extends Provider[ApiMetrics] {
+class ApiMetricsProvider @Inject() (inboundMetrics: Metrics) extends Provider[ApiMetrics] {
   def get(): ApiMetrics = new ApiMetricsImpl(inboundMetrics)
 }
