@@ -16,26 +16,18 @@ inThisBuild(
 )
 
 lazy val library = (project in file("."))
-  .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
     scalaVersion := scala2_12,
     majorVersion := 2,
     name := "http-metrics",
     isPublicArtefact := true,
-    libraryDependencies ++= deps,
+    libraryDependencies ++= LibDependencies.compile ++ LibDependencies.test,
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
     )
   )
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
-
-val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
-  play26 = (LibDependencies.coreCompilePlay26 ++ LibDependencies.coreTestPlay26),
-  play27 = (LibDependencies.coreCompilePlay27 ++ LibDependencies.coreTestPlay27),
-  play28 = (LibDependencies.coreCompilePlay28 ++ LibDependencies.coreTestPlay28),
-  shared = (LibDependencies.coreCompileCommon ++ LibDependencies.coreTestCommon)
-)
 
 // Coverage configuration
 coverageMinimumStmtTotal := 80
