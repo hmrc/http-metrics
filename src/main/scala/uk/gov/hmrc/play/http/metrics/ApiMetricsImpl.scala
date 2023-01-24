@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,12 @@
 
 package uk.gov.hmrc.play.http.metrics
 
-import com.codahale.metrics.MetricRegistry
 import javax.inject.{Inject, Provider, Singleton}
-import uk.gov.hmrc.play.http.metrics.common._ 
+
+import com.codahale.metrics.MetricRegistry
 import com.kenshoo.play.metrics.Metrics
+
+import uk.gov.hmrc.play.http.metrics.common._
 
 class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 
@@ -41,6 +43,6 @@ class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 }
 
 @Singleton
-class ApiMetricsProvider @Inject()(inboundMetrics: Metrics) extends Provider[ApiMetrics] {
+class ApiMetricsProvider @Inject() (inboundMetrics: Metrics) extends Provider[ApiMetrics] {
   def get(): ApiMetrics = new ApiMetricsImpl(inboundMetrics)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,18 @@
 
 package uk.gov.hmrc.play.http.metrics
 
-import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
-import org.scalatest.{Matchers, OptionValues, WordSpec}
-import org.scalatestplus.play.WsScalaTestClient
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import javax.inject.Singleton
 
-abstract class HmrcSpec extends WordSpec with Matchers with OptionValues with WsScalaTestClient with MockitoSugar with ArgumentMatchersSugar
+import play.api.inject.Binding
+import play.api.{Configuration, Environment}
 
-abstract class AsyncHmrcSpec extends HmrcSpec with DefaultAwaitTimeout with FutureAwaits {}
+import uk.gov.hmrc.play.http.metrics.common.ApiMetrics
+
+class Module extends play.api.inject.Module {
+
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
+    Seq(
+      bind[ApiMetrics].toProvider[ApiMetricsProvider].in[Singleton]
+    )
+  }
+}

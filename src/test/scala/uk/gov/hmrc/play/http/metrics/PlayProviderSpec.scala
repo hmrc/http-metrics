@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,15 @@ package uk.gov.hmrc.play.http.metrics
 
 import com.codahale.metrics.Timer.Context
 import com.codahale.metrics.{Counter, MetricRegistry}
-import com.kenshoo.play.metrics.{DisabledMetrics, MetricsImpl}
+import com.kenshoo.play.metrics.MetricsImpl
+
 import uk.gov.hmrc.play.http.metrics.common._
 
 class PlayProviderSpec extends AsyncHmrcSpec {
 
   trait Setup {
 
-    val mockMetrics = mock[MetricsImpl]
+    val mockMetrics  = mock[MetricsImpl]
     val mockRegistry = mock[MetricRegistry]
 
     val api = API("api")
@@ -38,7 +39,7 @@ class PlayProviderSpec extends AsyncHmrcSpec {
     when(successCounter.inc()).thenCallRealMethod()
     when(mockRegistry.counter("api-success-counter")).thenReturn(successCounter)
 
-    val timer = mock[com.codahale.metrics.Timer]
+    val timer   = mock[com.codahale.metrics.Timer]
     val context = mock[Context]
     when(context.stop()).thenReturn(1L)
 
@@ -47,7 +48,6 @@ class PlayProviderSpec extends AsyncHmrcSpec {
 
     when(mockMetrics.defaultRegistry).thenReturn(mockRegistry)
     val apiMetricsProviderWithMetricImpl = new ApiMetricsProvider(mockMetrics)
-    val apiMetricsProviderWithDisabledMetrics = new ApiMetricsProvider(new DisabledMetrics())
 
   }
 

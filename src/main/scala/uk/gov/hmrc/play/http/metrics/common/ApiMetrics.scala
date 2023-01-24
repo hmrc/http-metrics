@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,12 @@ trait Timer {
   def stop(): Unit
 }
 
-
 object NoopTimer extends Timer {
   def stop(): Unit = {}
 }
 
 class NoopApiMetrics extends ApiMetrics {
-  override def recordFailure(api: API): Unit = ()
-  override def recordSuccess(api: API): Unit = ()
+  override def recordFailure(api: API): Unit        = ()
+  override def recordSuccess(api: API): Unit        = ()
   override def startTimer(api: API): NoopTimer.type = NoopTimer
 }
