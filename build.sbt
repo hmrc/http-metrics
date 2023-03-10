@@ -1,7 +1,7 @@
 import sbt.Keys._
 import sbt._
 
-lazy val scala212 = "2.12.16"
+lazy val scala212 = "2.12.15"
 lazy val scala213 = "2.13.8"
 lazy val supportedScalaVersions = List(scala212, scala213)
 
@@ -19,10 +19,10 @@ inThisBuild(
 
 lazy val library = (project in file("."))
   .settings(
-    crossScalaVersions := supportedScalaVersions,
+    crossScalaVersions := supportedScalaVersions
   )
   .settings(
-    scalaVersion := scala213,
+    scalaVersion := scala212,
     majorVersion := 2,
     name := "http-metrics",
     isPublicArtefact := true,
