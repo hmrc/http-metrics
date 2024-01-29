@@ -19,13 +19,10 @@ package uk.gov.hmrc.play.http.metrics
 import javax.inject.{Inject, Provider, Singleton}
 
 import com.codahale.metrics.MetricRegistry
-import com.kenshoo.play.metrics.Metrics
 
 import uk.gov.hmrc.play.http.metrics.common._
 
-class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
-
-  val metricsRegistry: MetricRegistry = metrics.defaultRegistry
+class ApiMetricsImpl(metricsRegistry: MetricRegistry) extends ApiMetrics {
 
   def recordFailure(api: API): Unit =
     metricsRegistry.counter(api.name ++ "-failed-counter").inc()
@@ -43,6 +40,6 @@ class ApiMetricsImpl(metrics: Metrics) extends ApiMetrics {
 }
 
 @Singleton
-class ApiMetricsProvider @Inject() (inboundMetrics: Metrics) extends Provider[ApiMetrics] {
-  def get(): ApiMetrics = new ApiMetricsImpl(inboundMetrics)
+class ApiMetricsProvider @Inject() (metricsRegistry: MetricRegistry) extends Provider[ApiMetrics] {
+  def get(): ApiMetrics = new ApiMetricsImpl(metricsRegistry)
 }

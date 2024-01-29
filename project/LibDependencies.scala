@@ -1,21 +1,20 @@
 import sbt._
 
 object LibDependencies {
-  val play28Version = "2.8.18"
+  val playVersion = "3.0.1"
 
   val compile: Seq[ModuleID] = Seq(
-    "com.kenshoo"            %% "metrics-play"              % "2.7.3_0.8.2",
-    "io.dropwizard.metrics"   % "metrics-graphite"          % "4.1.17",
-    "com.typesafe.play"      %% "play"                      % play28Version,
-    "com.typesafe.play"      %% "play-guice"                % play28Version
+    "io.dropwizard.metrics" % "metrics-graphite" % "4.2.22",
+    "org.playframework"    %% "play"             % playVersion,
+    "org.playframework"    %% "play-guice"       % playVersion
   )
 
   val test: Seq[ModuleID] = Seq(
-    "org.pegdown"             % "pegdown"                   % "1.6.0",
-    "com.github.tomakehurst"  % "wiremock-jre8-standalone"  % "2.27.1",
-    "org.mockito"            %% "mockito-scala-scalatest"   % "1.7.1",
-    "com.typesafe.play"      %% "play-test"                 % play28Version,
-    "org.scalatestplus.play" %% "scalatestplus-play"        % "5.1.0",
-    "com.vladsch.flexmark"    % "flexmark-all"              % "0.36.8"
+    "org.pegdown"             % "pegdown"                 % "1.6.0",
+    "com.github.tomakehurst"  % "wiremock"                % "3.0.0-beta-7",
+    "org.mockito"            %% "mockito-scala-scalatest" % "1.17.29",
+    "org.playframework"      %% "play-test"               % playVersion,
+    "org.scalatestplus.play" %% "scalatestplus-play"      % "7.0.1",
+    "com.vladsch.flexmark"    % "flexmark-all"            % "0.64.8"
   ).map(_ % Test)
 }
