@@ -18,7 +18,6 @@ package uk.gov.hmrc.play.http.metrics
 
 import com.codahale.metrics.Timer.Context
 import com.codahale.metrics.{Counter, MetricRegistry}
-import com.kenshoo.play.metrics.MetricsImpl
 
 import uk.gov.hmrc.play.http.metrics.common._
 
@@ -26,7 +25,6 @@ class PlayProviderSpec extends AsyncHmrcSpec {
 
   trait Setup {
 
-    val mockMetrics  = mock[MetricsImpl]
     val mockRegistry = mock[MetricRegistry]
 
     val api = API("api")
@@ -46,8 +44,7 @@ class PlayProviderSpec extends AsyncHmrcSpec {
     when(mockRegistry.timer("api-timer")).thenReturn(timer)
     when(timer.time()).thenReturn(context)
 
-    when(mockMetrics.defaultRegistry).thenReturn(mockRegistry)
-    val apiMetricsProviderWithMetricImpl = new ApiMetricsProvider(mockMetrics)
+    val apiMetricsProviderWithMetricImpl = new ApiMetricsProvider(mockRegistry)
 
   }
 
