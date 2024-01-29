@@ -10,11 +10,11 @@ object LibDependencies {
   )
 
   val test: Seq[ModuleID] = Seq(
-    "org.pegdown"             % "pegdown"                  % "1.6.0",
-    "com.github.tomakehurst"  % "wiremock-jre8-standalone" % "2.27.1",
-    "org.mockito"            %% "mockito-scala-scalatest"  % "1.7.1",
-    "org.playframework"      %% "play-test"                % playVersion,
-    "org.scalatestplus.play" %% "scalatestplus-play"       % "5.1.0",
-    "com.vladsch.flexmark"    % "flexmark-all"             % "0.36.8"
+    "org.pegdown"             % "pegdown"                 % "1.6.0",
+    "com.github.tomakehurst"  % "wiremock"                % "3.0.0-beta-7",
+    "org.mockito"            %% "mockito-scala-scalatest" % "1.17.14",
+    "org.playframework"      %% "play-test"               % playVersion,
+    "org.scalatestplus.play" %% "scalatestplus-play"      % "7.0.1",
+    "com.vladsch.flexmark"    % "flexmark-all"            % "0.64.8"
   ).map(_ % Test)
 }
