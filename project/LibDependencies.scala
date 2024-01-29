@@ -12,7 +12,7 @@ object LibDependencies {
   val test: Seq[ModuleID] = Seq(
     "org.pegdown"             % "pegdown"                 % "1.6.0",
     "com.github.tomakehurst"  % "wiremock"                % "3.0.0-beta-7",
-    "org.mockito"            %% "mockito-scala-scalatest" % "1.17.14",
+    "org.mockito"            %% "mockito-scala-scalatest" % "1.17.29",
     "org.playframework"      %% "play-test"               % playVersion,
     "org.scalatestplus.play" %% "scalatestplus-play"      % "7.0.1",
     "com.vladsch.flexmark"    % "flexmark-all"            % "0.64.8"
