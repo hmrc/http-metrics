@@ -2,6 +2,8 @@
 
 Metrics for connectors, to provide response times, error & success counts for downstream services.  Leverages the existing MDTP patterns to make it as easy as possible to add metrics to your services.   
 
+The library is designed as a dependency for API Platform services and is subject to significant change without notice.
+
 ## Usage 
 
 ```scala
