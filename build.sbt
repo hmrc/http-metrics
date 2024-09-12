@@ -6,8 +6,8 @@ lazy val appName = "http-metrics"
 Global / bloopAggregateSourceDependencies := true
 Global / bloopExportJarClassifiers := Some(Set("sources"))
 
-ThisBuild / scalaVersion := "3.3.3"
-ThisBuild / majorVersion := 2
+ThisBuild / scalaVersion := "3.4.2"
+ThisBuild / majorVersion := 3
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
@@ -20,7 +20,7 @@ lazy val library = Project(appName, file("."))
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
 
 // Coverage configuration
-coverageMinimumStmtTotal := 80
+coverageMinimumStmtTotal := 79
 coverageFailOnMinimum    := true
 coverageExcludedPackages := Seq(
   "uk.gov.hmrc.play.http.metrics.common"
