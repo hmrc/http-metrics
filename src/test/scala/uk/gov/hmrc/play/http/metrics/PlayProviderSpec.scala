@@ -18,6 +18,7 @@ package uk.gov.hmrc.play.http.metrics
 
 import com.codahale.metrics.Timer.Context
 import com.codahale.metrics.{Counter, MetricRegistry}
+import org.mockito.Mockito._
 
 import uk.gov.hmrc.play.http.metrics.common._
 

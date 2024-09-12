@@ -48,23 +48,18 @@ sbt test
 ---
 
 ## Installing
- 
-Include the following dependency in your SBT build for Play 2.6
+
+In your SBT build add:
 
 ``` scala
-resolvers += Resolver.bintrayRepo("hmrc", "releases")
- 
-libraryDependencies += "uk.gov.hmrc" %% "http-metrics-play-26" % "[INSERT-VERSION]"
+libraryDependencies += "uk.gov.hmrc" %% "http-metrics" % "[INSERT-VERSION]"
 ```
 
-or the following for Play 2.7
+## Versioning
 
+Versions 3.0.0 and above require Scala 3 and support Play 3.
 
-``` scala
-resolvers += Resolver.bintrayRepo("hmrc", "releases")
- 
-libraryDependencies += "uk.gov.hmrc" %% "http-metrics-play-27" % "[INSERT-VERSION]"
-```
+Versions 2.x.x support Scala 2
 
 ## License
 

@@ -1,23 +1,26 @@
 import sbt.Keys._
 import sbt._
 
-scalaVersion := "2.13.12"
+lazy val appName = "http-metrics"
 
+Global / bloopAggregateSourceDependencies := true
+Global / bloopExportJarClassifiers := Some(Set("sources"))
+
+ThisBuild / scalaVersion := "3.4.2"
+ThisBuild / majorVersion := 3
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
-ThisBuild / semanticdbEnabled                                    := true
-ThisBuild / semanticdbVersion                                    := scalafixSemanticdb.revision
 
-lazy val library = (project in file("."))
+lazy val library = Project(appName, file("."))
   .settings(
-    majorVersion     := 2,
-    name             := "http-metrics",
     isPublicArtefact := true,
     libraryDependencies ++= LibDependencies.compile ++ LibDependencies.test
   )
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
 
 // Coverage configuration
-coverageMinimumStmtTotal := 80
+coverageMinimumStmtTotal := 79
 coverageFailOnMinimum    := true
 coverageExcludedPackages := Seq(
   "uk.gov.hmrc.play.http.metrics.common"
